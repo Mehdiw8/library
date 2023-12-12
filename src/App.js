@@ -1,42 +1,52 @@
 import { useState, useEffect } from "react";
-import "./App.css";
-import { getAllBooks, getAllShelves } from "./services/libraryServices";
-import { NavLink, Route, Routes } from "react-router-dom";
+import {
+  getAllBooks,
+  getAllShelves,
+  getAllSubjects,
+} from "./services/libraryServices";
+import { Route, Routes } from "react-router-dom";
 import { ModelOne, ModelThree, ModelTwo } from "./components/models";
-import { BACKGROUND } from "./helpers/color";
 import Navbar from "./components/Navbar";
-import MainLayout from "./components/MainLayout";
+import MainLayout from "./layouts/MainLayout";
 
 function App() {
-  const [shelves, setShelves] = useState();
-  const [books, setBooks] = useState();
-  const [error, setError] = useState();
-  const [loading, setLoading] = useState(false);
+  const [shelves, setShelves] = useState([]);
+  const [books, setBooks] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    (async function getData() {
-      setLoading(false);
+    async function getData() {
       try {
-        const copydata = await getAllShelves();
-        const copyBooks = await getAllBooks();
+        const shelvesData = await getAllShelves();
+        const booksData = await getAllBooks();
+        const subjectsData = await getAllSubjects();
 
-        setBooks(copyBooks);
-        setShelves(copydata);
+        setShelves(shelvesData);
+        setBooks(booksData);
+        setSubjects(subjectsData);
+
+        setLoading(false);
       } catch (error) {
-        setError(error);
+        console.error("Error fetching data:", error);
+        setError(true);
+        setLoading(false);
       }
-    })();
+    }
+
+    getData();
   }, []);
 
   return (
     <section className="h-screen w-full bg-white relative flex overflow-hidden">
-  
       <Navbar />
-      <MainLayout>
+      <MainLayout error={error} loading={loading}>
         <Routes>
-          <Route path="/" default element={<ModelOne loading={loading} />} />
-          <Route path="/m2" element={<ModelTwo />} />
-          <Route path="/m3" element={<ModelThree />} />
+          <Route path="/" default element={<ModelOne shelves={shelves} />} />
+          <Route path="/model_2" element={<ModelTwo books={books} />} />
+          <Route path="/model_3" element={<ModelThree subjects={subjects} />} />
         </Routes>
       </MainLayout>
     </section>

@@ -1,17 +1,13 @@
-import Spinner from "../Spinner";
 import Table from "../Table";
 
-const ModelOne = ({ loading }) => {
+const ModelOne = ({ shelves }) => {
   return (
-    <>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <section>
-          <Table />
-        </section>
-      )}
-    </>
+    <Table
+      shelves={shelves}
+      model={1}
+      tableHead=" ارتباط یک به چند بین موضوعات و قفسه‌ها"
+      description={"در این مدل، هر قفسه می‌تواند چند موضوع داشته باشد."}
+    />
   );
 };
 
