@@ -18,12 +18,9 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender, toast }) => {
   const [shelfDelId, setShelfDelId] = useState([]);
   const addbookToShelves = useCallback(
     (id) => {
-      const len = shelves.length;
-      console.log(`firs : T${shelfId + len + 4}`);
-      console.log(`sec :${dropShelfId}`);
       let uniqueIds = new Set();
       setBookId(id);
-      if (`T${shelfId-1}` === dropShelfId) {
+      if (`T${shelfId - 1}` === dropShelfId) {
         const findBook = books.find((book) => book.id === bookId);
         const findShelf = shelves.find((shelf) => shelf.id === shelfId);
         if (findBook) {
@@ -34,14 +31,14 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender, toast }) => {
               uniqueIds.add(obj.id);
               return true;
             }
-            // hint Ezaf kon
+            toast.error("اینو قبلا اضاف کردی", { icon: "🎈" });
             return false;
           });
           findShelf["booksInShelf"] = uniqueArray;
         }
       }
     },
-    [dropShelfId, shelfId, shelves, books, bookId]
+    [dropShelfId, shelfId, shelves, books, bookId, toast]
   );
 
   useEffect(() => {
@@ -67,17 +64,24 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender, toast }) => {
   };
   const createShelf = async (e) => {
     e.preventDefault();
-    const { status } = await createTheShelf(shelfDetail);
-    if (status === 201) {
-      toast.success("قفسه با موفقیت ساخته شد", { icon: "🚀" });
+    try {
+      const { status } = await createTheShelf(shelfDetail);
+      if (status === 201) {
+        toast.success("قفسه با موفقیت ساخته شد", { icon: "🚀" });
+      }
+    } catch (error) {
+      console.log(error);
     }
     setForeceRender((prev) => !prev);
     navigate(0);
   };
   const saveChanges = () => {
     shelfDelId?.map(async (shelfId) => {
-      const res = await deleteTheShelf(shelfId);
-      console.log(res);
+      try {
+        await deleteTheShelf(shelfId);
+      } catch (error) {
+        console.log(error);
+      }
     });
     navigate("/");
   };
