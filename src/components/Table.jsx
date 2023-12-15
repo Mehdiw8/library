@@ -6,7 +6,10 @@ const Table = ({ tableHead, shelves, description, books, model, subjects }) => {
     <section className="relative pt-7 bg-blueGray-50">
       <div className="w-full mb-12 px-4">
         {/* wrapper */}
-        <div className="  relative flex flex-col min-w-0 break-words max-w-xl mb-6 shadow-lg rounded bg-pink-900 text-white">
+        <div
+          style={{ minWidth: "650px" }}
+          className="  relative flex flex-col  break-words max-w-xl mb-6 shadow-lg rounded bg-pink-900 text-white"
+        >
           <div className="rounded-t mb-0 px-4 py-3 border-0">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full px-4 max-w-full flex-grow flex-1">
