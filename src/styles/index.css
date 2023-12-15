@@ -131,3 +131,17 @@ body {
   background-color: #282a36;
   color: #fff;
 }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom-select {
+  animation: fadeIn 0.5s ease-out; /* You can adjust the duration and easing function */
+}

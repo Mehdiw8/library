@@ -1,4 +1,4 @@
-const URL = "https://library-json.vercel.app";
+const URL = "http://localhost:9000";
 
 // Get shelves from server
 export async function getAllShelves() {
