@@ -23,7 +23,7 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender, toast }) => {
       console.log(`sec :${dropShelfId}`);
       let uniqueIds = new Set();
       setBookId(id);
-      if (`T${shelfId + len + 4}` === dropShelfId) {
+      if (`T${shelfId-1}` === dropShelfId) {
         const findBook = books.find((book) => book.id === bookId);
         const findShelf = shelves.find((shelf) => shelf.id === shelfId);
         if (findBook) {
