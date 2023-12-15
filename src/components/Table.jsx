@@ -5,7 +5,7 @@ const Table = ({ tableHead, shelves, description, books, model, subjects }) => {
   return (
     <section className="relative pt-12 bg-blueGray-50">
       <div className="w-full mb-12 px-4">
-        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-pink-900 text-white">
+        <div className="  relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-pink-900 text-white">
           <div className="rounded-t mb-0 px-4 py-3 border-0">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full px-4 max-w-full flex-grow flex-1">
@@ -32,12 +32,12 @@ const Table = ({ tableHead, shelves, description, books, model, subjects }) => {
                   <th className="px-14 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-right bg-pink-800 text-pink-300 border-pink-700"></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className=" ">
                 {shelves?.map((shelf) => (
-                  <TabelBody key={shelf.id}  item={shelf} />
+                  <TabelBody key={shelf.id} item={shelf} />
                 ))}
                 {books?.map((book) => (
-                  <TabelBody key={book.id}  item={book} />
+                  <TabelBody key={book.id} item={book} />
                 ))}
                 {subjects?.map((subjects) => (
                   <TabelBody key={subjects.id} item={subjects} model />

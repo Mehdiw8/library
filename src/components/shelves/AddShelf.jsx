@@ -1,59 +1,108 @@
 import { useState, useEffect, useCallback } from "react";
 import { Title, RegularBtn, MultiSelect } from "../../common";
-import DragItem from "./DragItem";
-import DropItem from "./DropItem";
+import { DragItem, DropItem, options } from "./index";
+import { createTheShelf, deleteTheShelf } from "../../services/libraryServices";
+import { useNavigate } from "react-router-dom";
 
-const AddShelf = ({ shelves, books, setShelves }) => {
-  // const dropRefs = useRef(copyBooks.map(() => createRef()));
+const AddShelf = ({ shelves, books, setShelves, setForeceRender }) => {
+  const navigate = useNavigate();
   const [shelfId, setShelfId] = useState("");
   const [dropShelfId, setDropShelfId] = useState("");
+  const [bookId, setBookId] = useState();
   const [shelfDetail, setShelfDetail] = useState({
+    id: "",
     name: "",
     topics: [],
+    booksInShelf: [],
   });
+  const [shelfDelId, setShelfDelId] = useState();
+  const [saveCreateShelf, setSaveCreateShelf] = useState(false);
+  const [saveDeleteShelf, setSaveDeleteShelf] = useState(false);
 
-  const options = [
-    { value: "خارجی", label: "خارجی" },
-    { value: "رمان", label: "رمان" },
-    { value: "داستان های کوتاه", label: "داستان های کوتاه" },
-    { value: "ایرانی", label: "ایرانی" },
-    { value: "تاریخی", label: "تاریخی" },
-    { value: "رئال", label: "رئال" },
-  ];
   const addbookToShelves = useCallback(
     (id) => {
-      console.log(dropShelfId);
-      console.log(`T${shelfId + 5}`);
-      if (`T${shelfId + 5}` === dropShelfId) {
-        console.log("nice");
+      const len = shelves.length;
+
+      // console.log(`T${shelfId + len + 4}`);
+      // console.log(dropShelfId);
+      let uniqueIds = new Set();
+      setBookId(id);
+      if (`T${shelfId + len + 4}` === dropShelfId) {
+        const findBook = books.find((book) => book.id === bookId);
+        const findShelf = shelves.find((shelf) => shelf.id === shelfId);
+        if (findBook) {
+          const { booksInShelf } = findShelf;
+          booksInShelf.push(findBook);
+          let uniqueArray = booksInShelf.filter((obj) => {
+            if (!uniqueIds.has(obj.id)) {
+              uniqueIds.add(obj.id);
+              return true;
+            }
+            // hint Ezaf kon
+            return false;
+          });
+          findShelf["booksInShelf"] = uniqueArray;
+        }
       }
-      // const targetShelf = shelves.find((shelf) => shelf.id === id);
-      // console.log(targetShelf)
-      console.log(id);
     },
-    [dropShelfId, shelfId]
+    [dropShelfId, shelfId, shelves, books, bookId]
   );
+
   useEffect(() => {
     addbookToShelves();
-  }, [dropShelfId, shelfId, addbookToShelves]);
+  }, [dropShelfId, shelfId, addbookToShelves, shelves]);
 
   const selectHandler = (subject) => {
+    const topics = subject.map((item) => item.value);
     setShelfDetail({
       ...shelfDetail,
-      topics: subject,
+      id: shelves.length + 1,
+      topics: topics,
     });
   };
-
-  const SubmitHandler = (e) => {
-    e.preventDefault();
+  const deleteShelf = async (shelf_Id) => {
+    setShelfDelId(shelf_Id);
+    const newShelves = shelves.filter((shelf) => shelf.id !== shelf_Id);
+    setShelves(newShelves);
+    setSaveDeleteShelf(true);
   };
+  const createShelf = async (e) => {
+    e.preventDefault();
+    const copyState = shelves;
+    copyState.push({ ...shelfDetail, id: shelves.length + 1 });
+    setShelves(copyState);
+    setForeceRender((prev) => !prev);
+    setSaveCreateShelf(true);
+  };
+  const saveChanges = async (e) => {
+    if (saveCreateShelf) {
+      const { status } = await createTheShelf(shelfDetail);
+      console.log(status);
+    }
+    console.log(shelfDetail);
+    if (saveDeleteShelf) {
+      const { status } = await deleteTheShelf(shelfDelId);
+      console.log(status);
+    }
+    navigate("/");
+    console.log(shelves);
+  };
+
+  // unMount
+  useEffect(() => {
+    return () => {
+      setSaveCreateShelf(false);
+      setSaveDeleteShelf(false);
+      console.log(saveDeleteShelf);
+    };
+  }, []);
 
   return (
     <section className=" flex justify-around mx-4 items-center relative bg-blueGray-50 w-full">
-      <section className="  flex justify-between items-start box-border h-5/6	 break-words w-full mb-6 shadow-lg rounded-md bg-pink-900 text-white">
+      <section className=" relative  flex justify-between items-start box-border h-5/6	 break-words w-full mb-6 shadow-lg rounded-md bg-pink-900 text-white">
         {/* shelf */}
         <form
-          onSubmit={SubmitHandler}
+          onSubmit={createShelf}
           className="flex flex-col h-full flex-1 py-2 px-5	 "
         >
           <Title classStyle=" text-center text-md" text="اضاف کردن قفسه" />
@@ -61,7 +110,7 @@ const AddShelf = ({ shelves, books, setShelves }) => {
             <label htmlFor="shelf">
               <input
                 onChange={(e) =>
-                  setShelfDetail({ ...shelfDetail, shelfName: e.target.value })
+                  setShelfDetail({ ...shelfDetail, name: e.target.value })
                 }
                 type="text"
                 name="username"
@@ -93,6 +142,7 @@ const AddShelf = ({ shelves, books, setShelves }) => {
                 addbookToShelves={addbookToShelves}
                 setShelfId={setShelfId}
                 setDropShelfId={setDropShelfId}
+                deleteShelf={deleteShelf}
               />
             ))}
           </ul>
@@ -112,6 +162,12 @@ const AddShelf = ({ shelves, books, setShelves }) => {
             ))}
           </ul>
         </div>
+
+        <RegularBtn
+          customStyle="absolute left-2 bottom-2  "
+          btnName={"ذخیره تغییرات 🚀"}
+          onclick={saveChanges}
+        />
       </section>
     </section>
   );

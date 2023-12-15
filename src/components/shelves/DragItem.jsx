@@ -17,7 +17,7 @@ const DragItem = ({ text, count, shelves }) => {
     <>
       <li
         ref={drag}
-        className="text-body-color dark:text-dark-6  text-base flex justify-start items-center mt-3 "
+        className=" cursor-pointer text-body-color dark:text-dark-6  text-base flex justify-start items-center mt-3 "
         style={{
           opacity: isDragging ? 0.5 : 1,
         }}

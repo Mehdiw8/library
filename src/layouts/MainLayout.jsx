@@ -21,13 +21,20 @@ const MainLayout = ({ children, loading, error }) => {
             }`}
             link="/add_shelf"
           />
+          <Button
+            btnName="🏠"
+            customStyle={`absolute top-auto left-2 ${
+              pathname !== "/add_shelf" && "hidden"
+            }`}
+            link="/"
+          />
         </div>
 
         <section className="max-w-full h-full w-full flex relative overflow-y-hidden text-slate-950 justify-center">
           <img
             src={require("../assets/background.jpg")}
             alt="Background"
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-cover object-center opacity-60"
           />
           {loading ? <Spinner /> : children}
         </section>

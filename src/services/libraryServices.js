@@ -16,3 +16,27 @@ export async function getAllSubjects() {
   const data = await (await fetch(`${URL}/subjects`)).json();
   return data;
 }
+
+// Post Shelf
+
+export const createTheShelf = async (shelf) => {
+  const url = `${URL}/shelves`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(shelf),
+  });
+
+  return res;
+};
+
+export const deleteTheShelf = async (id) => {
+  const url = `${URL}/shelves/${id}`;
+  const res = await fetch(url, {
+    method: "DELETE",
+  });
+
+  return res;
+};

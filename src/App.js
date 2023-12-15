@@ -8,13 +8,13 @@ import { Route, Routes } from "react-router-dom";
 import { ModelOne, ModelThree, ModelTwo } from "./components/models";
 import Navbar from "./components/Navbar";
 import MainLayout from "./layouts/MainLayout";
-import AddShelf from "./components/createShelf/AddShelf";
+import AddShelf from "./components/shelves/AddShelf";
 
 function App() {
   const [shelves, setShelves] = useState([]);
   const [books, setBooks] = useState([]);
   const [subjects, setSubjects] = useState([]);
-
+  const [forceRender, setForeceRender] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -50,7 +50,14 @@ function App() {
           <Route path="/model_3" element={<ModelThree subjects={subjects} />} />
           <Route
             path="/add_shelf"
-            element={<AddShelf books={books} shelves={shelves} setShelves={setShelves} />}
+            element={
+              <AddShelf
+                books={books}
+                shelves={shelves}
+                setShelves={setShelves}
+                setForeceRender={setForeceRender}
+              />
+            }
           />
         </Routes>
       </MainLayout>
