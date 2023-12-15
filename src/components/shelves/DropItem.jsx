@@ -8,7 +8,7 @@ const DropItem = ({
   setShelfId,
   setDropShelfId,
   shelf_Id,
-  deleteShelf
+  deleteShelf,
 }) => {
   const [{ isOver }, drop] = useDrop({
     accept: "Item",
@@ -39,7 +39,7 @@ const DropItem = ({
           {copyBooks?.length === 0 ? (
             <>
               {!isOver && (
-                <li className="opacity-70   ">+ از لیست بکش اینجا </li>
+                <li className="opacity-70">+ از لیست بکش اینجا </li>
               )}
             </>
           ) : (

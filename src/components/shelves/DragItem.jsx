@@ -1,11 +1,7 @@
-// braye har li lazme k in hook estefade she
 import { useDrag } from "react-dnd";
 
 const DragItem = ({ text, count, shelves }) => {
-  // console.log(shelves[`${[index]}`]);
-
-  // first variable is Boolean , refrence whitch element make dragable
-  // return mikone yek object ro k haviye yekseri informatione
+ 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "Item",
     item: { id: count },

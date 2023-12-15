@@ -4,7 +4,7 @@ import { DragItem, DropItem, options } from "./index";
 import { createTheShelf, deleteTheShelf } from "../../services/libraryServices";
 import { useNavigate } from "react-router-dom";
 
-const AddShelf = ({ shelves, books, setShelves, setForeceRender }) => {
+const AddShelf = ({ shelves, books, setShelves, setForeceRender, toast }) => {
   const navigate = useNavigate();
   const [shelfId, setShelfId] = useState("");
   const [dropShelfId, setDropShelfId] = useState("");
@@ -15,16 +15,10 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender }) => {
     topics: [],
     booksInShelf: [],
   });
-  const [shelfDelId, setShelfDelId] = useState();
-  const [saveCreateShelf, setSaveCreateShelf] = useState(false);
-  const [saveDeleteShelf, setSaveDeleteShelf] = useState(false);
-
+  const [shelfDelId, setShelfDelId] = useState([]);
   const addbookToShelves = useCallback(
     (id) => {
       const len = shelves.length;
-
-      // console.log(`T${shelfId + len + 4}`);
-      // console.log(dropShelfId);
       let uniqueIds = new Set();
       setBookId(id);
       if (`T${shelfId + len + 4}` === dropShelfId) {
@@ -54,6 +48,7 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender }) => {
 
   const selectHandler = (subject) => {
     const topics = subject.map((item) => item.value);
+
     setShelfDetail({
       ...shelfDetail,
       id: shelves.length + 1,
@@ -61,41 +56,30 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender }) => {
     });
   };
   const deleteShelf = async (shelf_Id) => {
-    setShelfDelId(shelf_Id);
+    const copyShelfDelId = shelfDelId;
+    copyShelfDelId.push(shelf_Id);
+    setShelfDelId(copyShelfDelId);
+    toast.error('قفسه با موفقیت پاک شد', { icon: '💣' });
+    console.log(shelfDelId);
     const newShelves = shelves.filter((shelf) => shelf.id !== shelf_Id);
     setShelves(newShelves);
-    setSaveDeleteShelf(true);
   };
   const createShelf = async (e) => {
     e.preventDefault();
-    const copyState = shelves;
-    copyState.push({ ...shelfDetail, id: shelves.length + 1 });
-    setShelves(copyState);
+    const { status } = await createTheShelf(shelfDetail);
+    if (status === 201) {
+      toast.success("قفسه با موفقیت ساخته شد", { icon: "🚀" });
+    }
     setForeceRender((prev) => !prev);
-    setSaveCreateShelf(true);
+    navigate(0);
   };
-  const saveChanges = async (e) => {
-    if (saveCreateShelf) {
-      const { status } = await createTheShelf(shelfDetail);
-      console.log(status);
-    }
-    console.log(shelfDetail);
-    if (saveDeleteShelf) {
-      const { status } = await deleteTheShelf(shelfDelId);
-      console.log(status);
-    }
+  const saveChanges = () => {
+    shelfDelId?.map(async (shelfId) => {
+      const res = await deleteTheShelf(shelfId);
+      console.log(res);
+    });
     navigate("/");
-    console.log(shelves);
   };
-
-  // unMount
-  useEffect(() => {
-    return () => {
-      setSaveCreateShelf(false);
-      setSaveDeleteShelf(false);
-      console.log(saveDeleteShelf);
-    };
-  }, []);
 
   return (
     <section className=" flex justify-around mx-4 items-center relative bg-blueGray-50 w-full">
@@ -132,7 +116,7 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender }) => {
             text="دسته بندی موضوعات و قفسه"
           />
           <ul className="text-sm  w-full flex flex-col justify-start items-start h-5/6 overflow-y-scroll mt-3  scrollbar-thin  scrollbar-thumb-pink-600 scrollbar-track-transparent ">
-            {/*  */}
+            {/* shelves */}
             {shelves?.map((shelf, index) => (
               <DropItem
                 key={index}

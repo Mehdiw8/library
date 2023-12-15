@@ -18,7 +18,6 @@ export async function getAllSubjects() {
 }
 
 // Post Shelf
-
 export const createTheShelf = async (shelf) => {
   const url = `${URL}/shelves`;
   const res = await fetch(url, {
@@ -31,7 +30,7 @@ export const createTheShelf = async (shelf) => {
 
   return res;
 };
-
+// delete TheShelf
 export const deleteTheShelf = async (id) => {
   const url = `${URL}/shelves/${id}`;
   const res = await fetch(url, {

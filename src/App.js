@@ -9,6 +9,8 @@ import { ModelOne, ModelThree, ModelTwo } from "./components/models";
 import Navbar from "./components/Navbar";
 import MainLayout from "./layouts/MainLayout";
 import AddShelf from "./components/shelves/AddShelf";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [shelves, setShelves] = useState([]);
@@ -17,7 +19,6 @@ function App() {
   const [forceRender, setForeceRender] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     async function getData() {
       try {
@@ -28,7 +29,6 @@ function App() {
         setShelves(shelvesData);
         setBooks(booksData);
         setSubjects(subjectsData);
-
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -38,10 +38,16 @@ function App() {
     }
 
     getData();
-  }, []);
+  }, [forceRender]);
 
   return (
     <section className="h-screen w-full bg-white relative flex overflow-hidden">
+      <ToastContainer
+        pauseOnFocusLoss={false}
+        pauseOnHover={false}
+        rtl={true}
+        theme="colored"
+      />
       <Navbar />
       <MainLayout error={error} loading={loading}>
         <Routes>
@@ -52,6 +58,7 @@ function App() {
             path="/add_shelf"
             element={
               <AddShelf
+                toast={toast}
                 books={books}
                 shelves={shelves}
                 setShelves={setShelves}
