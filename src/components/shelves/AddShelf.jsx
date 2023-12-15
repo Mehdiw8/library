@@ -19,6 +19,8 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender, toast }) => {
   const addbookToShelves = useCallback(
     (id) => {
       const len = shelves.length;
+      console.log(`firs : T${shelfId + len + 4}`);
+      console.log(`sec :${dropShelfId}`);
       let uniqueIds = new Set();
       setBookId(id);
       if (`T${shelfId + len + 4}` === dropShelfId) {
@@ -59,8 +61,7 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender, toast }) => {
     const copyShelfDelId = shelfDelId;
     copyShelfDelId.push(shelf_Id);
     setShelfDelId(copyShelfDelId);
-    toast.error('قفسه با موفقیت پاک شد', { icon: '💣' });
-    console.log(shelfDelId);
+    toast.error("قفسه با موفقیت پاک شد", { icon: "💣" });
     const newShelves = shelves.filter((shelf) => shelf.id !== shelf_Id);
     setShelves(newShelves);
   };
