@@ -73,7 +73,7 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender, toast }) => {
       console.log(error);
     }
     setForeceRender((prev) => !prev);
-    // navigate(0);
+    navigate(0);
   };
   const saveChanges = () => {
     shelfDelId?.map(async (shelfId) => {
