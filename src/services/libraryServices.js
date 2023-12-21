@@ -1,8 +1,9 @@
-const URL = "https://library-json-bkc89ekb5-mehdiw8s-projects.vercel.app";
-
+const URL = "https://json-server-library-2.vercel.app";
 // Get shelves from server
 export async function getAllShelves() {
+  console.log(`${URL}/shelves`)
   const data = await (await fetch(`${URL}/shelves`)).json();
+  
   return data;
 }
 
