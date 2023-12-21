@@ -7,7 +7,7 @@ const MainLayout = ({ children, loading, error }) => {
   const { pathname } = useLocation();
   return (
     <>
-      <main className="w-full h-full flex flex-col justify-between">
+      <main className="w-full h-full flex flex-col justify-between bg-gray-700">
         <div className="h-16 flex justify-center items-center bg-gray-800 relative ">
           <SiBookstack className="mt-1 ml-2 text-xl" />
           <h3>کتابخانه من</h3>
@@ -31,11 +31,7 @@ const MainLayout = ({ children, loading, error }) => {
         </div>
 
         <section className="max-w-full h-full w-full flex relative overflow-y-hidden text-slate-950 justify-center">
-          <img
-            src={require("../assets/background.jpg")}
-            alt="Background"
-            className="absolute inset-0 w-full h-full object-cover object-center opacity-60"
-          />
+          
           {loading ? <Spinner /> : children}
         </section>
       </main>

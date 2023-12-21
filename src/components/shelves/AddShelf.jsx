@@ -3,6 +3,7 @@ import { Title, RegularBtn, MultiSelect } from "../../common";
 import { DragItem, DropItem, options } from "./index";
 import { createTheShelf, deleteTheShelf } from "../../services/libraryServices";
 import { useNavigate } from "react-router-dom";
+import MultiSelectTree from "../../common/MultiSelectTree";
 
 const AddShelf = ({ shelves, books, setShelves, setForeceRender, toast }) => {
   const navigate = useNavigate();
@@ -16,11 +17,14 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender, toast }) => {
     booksInShelf: [],
   });
   const [shelfDelId, setShelfDelId] = useState([]);
+
+  // console.log(`first T${shelfId + shelves.length + 4}`);
+  // console.log(` sec ${dropShelfId}`);
   const addbookToShelves = useCallback(
     (id) => {
       let uniqueIds = new Set();
       setBookId(id);
-      if (`T${shelfId - 1}` === dropShelfId) {
+      if (`T${shelfId + shelves.length + 4}` === dropShelfId) {
         const findBook = books.find((book) => book.id === bookId);
         const findShelf = shelves.find((shelf) => shelf.id === shelfId);
         if (findBook) {
@@ -109,6 +113,11 @@ const AddShelf = ({ shelves, books, setShelves, setForeceRender, toast }) => {
                 required
               />
             </label>
+            {/* options={options} selectHandler={selectHandler} */}
+            {/* MultiSelect 1 */}
+            <MultiSelectTree  />
+
+            {/* multiSelect 2 */}
             <MultiSelect options={options} selectHandler={selectHandler} />
             <RegularBtn type="submit" btnName={"اضافه شود"} />
           </div>
